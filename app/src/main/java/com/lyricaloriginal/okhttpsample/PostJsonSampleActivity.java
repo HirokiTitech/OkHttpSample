@@ -1,0 +1,77 @@
+package com.lyricaloriginal.okhttpsample;
+
+import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+
+public class PostJsonSampleActivity extends AppCompatActivity {
+
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_post_json_sample);
+
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String result = null;
+                try{
+                    result = post();
+                }catch(IOException ex){
+                    Log.d(getClass().getName(), ex.getMessage(), ex);
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                if(s == null){
+                    return;
+                }
+                TextView txtView = (TextView)findViewById(android.R.id.text1);
+                txtView.setText(s);
+            }
+        };
+        task.execute();
+    }
+
+    String post() throws IOException {
+        String json = bowlingJson("Anne", "Bob");
+
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url("http://www.roundsapp.com/post")
+                .post(body)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+
+    String bowlingJson(String player1, String player2) {
+        return "{'winCondition':'HIGH_SCORE',"
+                + "'name':'Bowling',"
+                + "'round':4,"
+                + "'lastSaved':1367702411696,"
+                + "'dateStarted':1367702378785,"
+                + "'players':["
+                + "{'name':'" + player1 + "','history':[10,8,6,7,8],'color':-13388315,'total':39},"
+                + "{'name':'" + player2 + "','history':[6,10,5,10,10],'color':-48060,'total':41}"
+                + "]}";
+    }
+}

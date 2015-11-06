@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">OkHttpSample</string>
+    <string name="get_sample">GET通信サンプル</string>
+    <string name="post_json_sample_sample">POST(JSON)通信サンプル</string>
+    <string name="auth_sample">ユーザ認証サンプル</string>
+    <string name="logging_sample">HTTP通信ログサンプル</string>
+    <string name="disk_cache_sample">ディスクキャッシュサンプル</string>
+</resources>
